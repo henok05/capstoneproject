@@ -1,0 +1,28 @@
+[
+               {
+                "id": 1,
+                "first": "Adam",
+                "last": "Bob",
+                "department": "IIB"
+               },
+               {
+                "id": 2,
+                "first": "abiot",
+                "last": "ashe",
+                "department": "cotm"
+               },
+
+              {
+                "id": 3,
+                "first": "henok",
+                "last": "japi",
+                "department": "ARC"
+               },
+
+               {
+                "id": 4,
+                "first": "betty",
+                "last": "Bogizaw",
+                "department": "ENG"
+               }
+             ]

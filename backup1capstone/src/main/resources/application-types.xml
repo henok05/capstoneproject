@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="users" format="json">
+      <types:shape format="weave" example="api/Examples/postexample.json"><![CDATA[%dw 2.0
+
+type users = {|
+  first: String, 
+  last: String, 
+  department: String
+|} {"example": "{\\\"first\\\":\\\"Adam\\\",\\\"last\\\":\\\"Bob\\\",\\\"department\\\":\\\"IIB\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="putuser" format="json">
+      <types:shape format="weave" example="api/Examples/putexample.json"><![CDATA[%dw 2.0
+
+type putuser = {|
+  id: Number {"typeId": "int"}, 
+  first: String, 
+  last: String, 
+  department: String
+|} {"example": "{\\\"id\\\":1,\\\"first\\\":\\\"Adam\\\",\\\"last\\\":\\\"Bob\\\",\\\"department\\\":\\\"IIB\\\"}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="postuser" format="json">
+      <types:shape format="weave" example="api/Examples/postexample.json"><![CDATA[%dw 2.0
+
+type postuser = {|
+  first: String, 
+  last: String, 
+  department: String
+|} {"example": "{\\\"first\\\":\\\"Adam\\\",\\\"last\\\":\\\"Bob\\\",\\\"department\\\":\\\"IIB\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#4543812e-4ca2-4045-9058-a633ae05664e">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="putuser"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#4db1c010-0323-427d-a012-5893f9310cb8">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="postuser"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
