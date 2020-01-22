@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="updateuserflow" doc:id="17fc6f43-5576-4f89-b05b-fd616653c16a" >
+		<ee:transform doc:name="Transform Message" doc:id="03a8e5bd-d7c3-4850-b7fa-85d65fb5761c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.craftsoftware.com/users
+---
+{
+	ns0#UpdateUserRequest: {
+		ns0#User: {
+			ns0#id: payload.id,
+			ns0#fist: payload.first,
+			ns0#last: payload.last,
+			ns0#department: payload.department
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="UpdateUser" doc:name="Copy_of_Consume" doc:id="c2654dcf-315d-44e9-a79d-d5a2618bbbf4" config-ref="Web_Service_Consumer_Config" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="2316cf7e-dc76-4b49-a77b-7bc37d645689" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"message": "successfully updated"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="deletuserflow" doc:id="177cf0b1-c984-45c4-bbac-29da27072889" >
+		<ee:transform doc:name="Transform Message" doc:id="41196806-61f6-4922-a6ee-21d2fff62ca1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.craftsoftware.com/users
+---
+{
+	ns0#DeleteUserRequest: {
+		ns0#id: attributes.uriParams.id as Number
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="DeleteUser" doc:name="Copy_of_Consume" doc:id="bc4ac15f-8213-4166-be21-c677fd70cd8d" config-ref="Web_Service_Consumer_Config" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="02cc1596-c103-4c61-95fd-22a770803ad9" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"message": "successfully deleted"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getallusersflow" doc:id="60c8fbcf-0e72-4dd9-906d-d45bcba64a93" >
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="a1537f49-9516-40e7-95d8-b341a55c9d92" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.craftsoftware.com/users
+---
+{
+	ns0#GetAllUsersRequest: null
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="GetAllUsers" doc:name="Copy_of_Consume" doc:id="835a8925-c5ab-49c8-88c3-8eb4e7d39d12" config-ref="Web_Service_Consumer_Config" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="c9db67a8-fa20-4b26-88cd-02d79f4e4ed1" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://www.craftsoftware.com/users
+---
+payload.body.ns0#GetAllUsersResponse.*ns0#Users map ( user , indexOfUser ) -> {
+	id: user.ns0#id default 0,
+	first: user.ns0#fist default "",
+	last: user.ns0#last default "",
+	department: user.ns0#department default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getuserbyidflow" doc:id="9f58e4eb-2331-4de4-b7e1-b95d7fd63ab6" >
+		<ee:transform doc:name="Transform Message" doc:id="81ab6d27-a220-4c24-bd67-5a24966b5697" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	id: attributes.uriParams.id as Number
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="GetUser" doc:name="Copy_of_Consume" doc:id="543cb1f5-8e3a-4aed-be67-9c6b36628fff" config-ref="Web_Service_Consumer_Config" >
+			<wsc:message >
+				<wsc:body ><![CDATA[#[output application/xml
+ns ns0 http://www.craftsoftware.com/users
+---
+{
+	ns0#GetUserRequest: {
+		ns0#id: attributes.uriParams.id as Number
+	}
+}]]]></wsc:body>
+			</wsc:message>
+		</wsc:consume>
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="bddec9f1-d049-45ac-91b1-16c9da3fcfcd" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+payload.body.GetUserResponse.User
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="creatuserflow" doc:id="d184f784-4de2-431a-a8a9-55d7fc13b952" >
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="5af44ede-e000-4a68-901e-1ec77bff46ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.craftsoftware.com/users
+---
+{
+	ns0#CreateUserRequest: {
+		ns0#CreateUser: {
+			ns0#fist: payload.first,
+			ns0#last: payload.last,
+			ns0#department: payload.department
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume operation="CreateUser" doc:name="Copy_of_Consume" doc:id="3fefe7cd-8c5e-4bb4-abec-10af61b894c0" config-ref="Web_Service_Consumer_Config" />
+		<ee:transform doc:name="Copy_of_Transform Message" doc:id="fb31e697-3084-4b69-99ab-f2ddaba01e3a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"message": "successfully created"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

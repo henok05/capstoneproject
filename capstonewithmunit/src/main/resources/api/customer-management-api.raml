@@ -1,0 +1,87 @@
+#%RAML 1.0
+title: Customer Management API
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/3afe2f16-21f3-4dde-be9f-1799f7e4a842/ # baseUri: 
+/users:
+  get:
+   description: getting all users
+   responses:
+     200:
+       body:
+         application/json:
+           example: !include Examples/getusers.json 
+     400:
+         body:
+          application/json:
+           example:
+             message: bad request        
+  post:
+   description: creat new user
+   body:
+      application/json:
+        example: !include Examples/postexample.json
+             
+   responses:
+     200:
+       body:
+         application/json:
+           example:
+             message: user created!
+     400:
+         body:
+          application/json:
+           example:
+             message: bad request        
+  put:
+      description: update single user  
+      body:
+        application/json:
+         example: !include Examples/putexample.json
+                    
+      responses:
+        200:
+         body:
+          application/json:
+           example:
+             message: update successful
+        400:
+          body:
+           application/json:
+            example:
+             message: unauthorized to update!           
+  /{id}:
+    get:
+      description: getting specific user by id 
+      responses:
+        200:
+         body:
+            application/json:
+              example: !include Examples/getidexample.json
+        400:
+          body:
+           application/json:
+            example:
+             message: bad request          
+    delete:
+      description: deleting single user by id 
+      body:
+          application/json:
+           example: !include Examples/getidexample.json
+      responses:
+         200:
+          body:
+           application/json:
+            example:
+             message: user successfuly deleted
+         401:
+          body:
+           application/json:
+            example:
+             message:unautorized to delete   
+
+            
+
+
+          
+
+             
+               
